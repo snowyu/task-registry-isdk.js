@@ -1,0 +1,81 @@
+{
+  "name": "task-registry-isdk",
+  "description": "ISDK Task is a document generation task. internal used via isdk.",
+  "version": "0.0.0",
+  "homepage": "https://github.com/snowyu/task-registry-isdk.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/snowyu/task-registry-isdk.js.git"
+  },
+  "main": "./index",
+  "files": [
+    "README.md",
+    "LICENSE-MIT",
+    "*.js",
+    "*.coffee",
+    "test",
+    "src",
+    "lib"
+  ],
+  "keywords": [
+    "task",
+    "registry",
+    "task-registry",
+    "isdk"
+  ],
+  "dependencies": {
+    "change-case": "^2.3.0",
+    "graceful-fs": "^4.1.2",
+    "inherits-ex": "^1.1.4",
+    "isdk-resource": "^0.1.1",
+    "minimatch-ex": "0.0.1",
+    "npm-command": "0.0.2",
+    "task-registry": "^0.2.2",
+    "task-registry-isdk-tasks": "0.0.2",
+    "util-ex": "^0.3.14"
+  },
+  "devDependencies": {
+    "chai": "~3.2.0",
+    "coffee-coverage": "^0.6.3",
+    "grunt": "~0.4.5",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-coffee": "~0.12.0",
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-mocha-test": "~0.12.6",
+    "grunt-newer": "~0.8.0",
+    "grunt-release": "~0.9.0",
+    "istanbul": "^0.3.18",
+    "mocha": "~2.1.0",
+    "pre-commit": "~1.1.1",
+    "rimraf": "~2.2.8",
+    "shasum": "1.0.0",
+    "sinon": "~1.16.1",
+    "sinon-chai": "~2.8.0"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "test-cov": "mocha --reporter dot && istanbul report text-summary lcovonly"
+  },
+  "contributors": [
+    {
+      "name": "Riceball LEE",
+      "email": "snowyu.lee@gmail.com",
+      "url": "https://github.com/snowyu"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Riceball LEE",
+      "email": "snowyu.lee@gmail.com"
+    }
+  ],
+  "pre-commit": [
+    "test"
+  ],
+  "bugs": {
+    "url": "https://github.com/snowyu/task-registry-isdk.js/issues"
+  },
+  "license": "MIT",
+  "stability": "unstable"
+}
