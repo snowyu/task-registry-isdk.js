@@ -40,23 +40,32 @@ describe 'isdk task', ->
   describe 'executeSync', ->
     it 'should run correctly', ->
       result = task.executeSync cwd: __dirname + '/fixture'
-      expect(EchoTask::_executeSync).to.be.calledOnce
-      file = findFile 'test.md', task.root
-      expect(EchoTask::_executeSync).to.be.calledWith file
-      expect(result).to.have.length 1
-      expect(result[0]).to.have.property 'file', file
-      expect(result[0].result).to.have.length.at.least 1
-      expect(result[0].result[0]).to.be.equal file
+      expect(EchoTask::_executeSync).to.be.callCount 4
+      testFile = task.folder.findSync 'test.md'
+      f1File = task.folder.findSync 'f1.md'
+      zFolder = task.folder.findSync 'zfolder'
+      #expect(EchoTask::_executeSync).to.be.calledWith testFile
+
+      expect(result).to.be.deep.equal file:task.folder, result:[
+        file: testFile, result: [testFile, 21]
+      , file: zFolder, result: [
+          { file: f1File, result: [ f1File, 21 ] }
+        ]
+      ]
 
   describe 'execute', ->
     it 'should run correctly', (done)->
       task.execute cwd: __dirname + '/fixture', (err, result)->
         unless err
-          expect(EchoTask::_executeSync).to.be.calledOnce
-          file = findFile 'test.md', task.root
-          expect(EchoTask::_executeSync).to.be.calledWith file
-          expect(result).to.have.length 1
-          expect(result[0]).to.have.property 'file', file
-          expect(result[0].result).to.have.length.at.least 1
-          expect(result[0].result[0]).to.be.equal file
+          expect(EchoTask::_executeSync).to.be.callCount 4
+          testFile = task.folder.findSync 'test.md'
+          f1File = task.folder.findSync 'f1.md'
+          zFolder = task.folder.findSync 'zfolder'
+          #expect(EchoTask::_executeSync).to.be.calledWith file
+          expect(result).to.be.deep.equal file:task.folder, result:[
+            file: testFile, result: [testFile, 21]
+          , file: zFolder, result: [
+              { file: f1File, result: [ f1File, 21 ] }
+            ]
+          ]
         done(err)

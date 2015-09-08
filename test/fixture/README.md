@@ -2,8 +2,10 @@
 tasks:
   <: #inherits the parent's tasks if any
     - Echo
+    - Echo: 21
 src:
   - "**/*.md"
+  - "**/"
   - "!**/.*"
   - "!./public"
 ---
