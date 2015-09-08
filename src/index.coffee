@@ -54,18 +54,21 @@ module.exports    = class ISDKTask
     return
   processFileSync: (aFile)->
     if aFile and aFile.tasks
-      tasks.executeSync aFile
-    return
+      result = tasks.executeSync aFile
+    result
   processSync: (aFiles)-> #process a files in a folder
     if isArray aFiles
       for file in aFiles
+        continue unless file.filter file
         file.loadSync(read:true) unless file.loaded()
+        task = file:file
         if file.isDirectory()
-          @processSync(file.contents)
+          task.result = @processSync(file.contents)
         else
-          @processFileSync(file)
+          task.result = @processFileSync(file)
+        task
   _executeSync: (aOptions)->
-    root = Resource aOptions.cwd, aOptions
+    @root = root = Resource aOptions.cwd, aOptions
     root.loadSync read:true, recursive:true
     @initTasks root['initConfig'], aOptions # the initialization configuration of tasks.
     @processSync root.contents
