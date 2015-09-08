@@ -52,23 +52,21 @@ module.exports    = class ISDKTask
       if aOptions.autoInstall and vMissedTasks.length
         initMissedTasks vMissedTasks
     return
-  processFileSync: (aFile)->
-    if aFile and aFile.tasks
-      result = tasks.executeSync aFile
-    result
-  processSync: (aFiles)-> #process a files in a folder
-    if isArray aFiles
-      for file in aFiles
+  processSync: (aFile)-> #process a files in a folder
+    vContents = aFile.contents
+    if isArray vContents
+      result = file:aFile
+      result.result = for file in vContents
         continue unless file.filter file
         file.loadSync(read:true) unless file.loaded()
-        task = file:file
-        if file.isDirectory()
-          task.result = @processSync(file.contents)
-        else
-          task.result = @processFileSync(file)
+        task = @processSync(file)
         task
+    else if aFile and aFile.tasks
+      result = file:aFile
+      result.result = tasks.executeSync aFile
+    result
   _executeSync: (aOptions)->
-    @root = root = Resource aOptions.cwd, aOptions
-    root.loadSync read:true, recursive:true
-    @initTasks root['initConfig'], aOptions # the initialization configuration of tasks.
-    @processSync root.contents
+    @folder = folder = Resource aOptions.cwd, aOptions
+    folder.loadSync read:true, recursive:true
+    @initTasks folder['initConfig'], aOptions # the initialization configuration of tasks.
+    @processSync folder
