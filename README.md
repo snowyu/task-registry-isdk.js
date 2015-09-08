@@ -6,7 +6,7 @@
 [![downloads](https://img.shields.io/npm/dm/task-registry-isdk.svg)](https://npmjs.org/package/task-registry-isdk)
 [![license](https://img.shields.io/npm/l/task-registry-isdk.svg)](https://npmjs.org/package/task-registry-isdk)
 
-ISDK Task is a document generation task.
+ISDK Task is a genernal buiding task.
 It takes a `cwd` directory and process it.
 The `src` is the file patterns to filter files.
 It outputs to the `dest` directory at last.
