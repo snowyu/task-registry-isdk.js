@@ -8,12 +8,11 @@ chai.use(sinonChai)
 
 setImmediate    = setImmediate || process.nextTick
 
-Resource        = require 'isdk-resource'
+#Resource        = require 'isdk-resource'
 Task            = require 'task-registry'
 register        = Task.register
 aliases         = Task.aliases
-
-require '../src'
+ISDKTask        = require '../src'
 
 class RootTask
   register RootTask
@@ -36,6 +35,10 @@ findFile = (aName, aResource)->
 describe 'isdk task', ->
   task = Task 'isdk'
   beforeEach ->EchoTask::_executeSync.reset()
+
+  it 'should get isdk task instance', ->
+    result = ISDKTask()
+    expect(result).to.be.instanceOf ISDKTask
 
   describe 'executeSync', ->
     it 'should run correctly', ->

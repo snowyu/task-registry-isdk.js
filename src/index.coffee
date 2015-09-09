@@ -29,6 +29,8 @@ module.exports    = class ISDKTask
     autoInstall:
       type: 'Boolean'
 
+  constructor: -> return super
+
   initMissedTasks = (aTasks)->
     vPkgNames = aTasks.map (i)->
       result = i.name.split('/').join('-')
