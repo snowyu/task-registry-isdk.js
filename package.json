@@ -31,7 +31,8 @@
     "minimatch-ex": "0.0.1",
     "npm-command": "0.0.2",
     "task-registry": "^0.2.2",
-    "task-registry-isdk-tasks": "^0.2.0",
+    "task-registry-isdk-tasks": "^0.2.1",
+    "terminal-logger": "^0.2.2",
     "util-ex": "^0.3.14"
   },
   "devDependencies": {

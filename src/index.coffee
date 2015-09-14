@@ -5,6 +5,7 @@ isObject          = require 'util-ex/lib/is/type/object'
 isArray           = require 'util-ex/lib/is/type/array'
 Resource          = require 'isdk-resource'
 Task              = require 'task-registry'
+Logger            = require 'terminal-logger'
 #register the tasks execution to the task-registry factory.
 require 'task-registry-isdk-tasks'
 
@@ -54,6 +55,9 @@ module.exports    = class ISDKTask
       if aOptions.autoInstall and vMissedTasks.length
         initMissedTasks vMissedTasks
     return
+  initLogger: (aOptions)->
+    tasks.logger = new Logger aOptions.logger
+    return
   processSync: (aFile)-> #process a files in a folder
     vContents = aFile.contents
     if isArray vContents
@@ -70,5 +74,6 @@ module.exports    = class ISDKTask
   _executeSync: (aOptions)->
     @folder = folder = Resource aOptions.cwd, aOptions
     folder.loadSync read:true, recursive:true
+    @initLogger folder
     @initTasks folder['initConfig'], aOptions # the initialization configuration of tasks.
     @processSync folder
