@@ -6,6 +6,7 @@ isArray           = require 'util-ex/lib/is/type/array'
 Resource          = require 'isdk-resource'
 Task              = require 'task-registry'
 Logger            = require 'terminal-logger'
+setPrototypeOf    = require 'inherits-ex/lib/setPrototypeOf'
 #register the tasks execution to the task-registry factory.
 require 'task-registry-isdk-tasks'
 
@@ -13,6 +14,8 @@ register          = Task.register
 aliases           = Task.aliases
 defineProperties  = Task.defineProperties
 tasks             = Task 'Tasks'
+
+path = Resource::fs.path
 
 module.exports    = class ISDKTask
   register ISDKTask
@@ -72,8 +75,21 @@ module.exports    = class ISDKTask
       result.result = tasks.executeSync aFile
     result
   _executeSync: (aOptions)->
-    @folder = folder = Resource aOptions.cwd, aOptions
-    folder.loadSync read:true, recursive:true
+    cwd = aOptions.cwd
+    folder = Resource cwd, aOptions
+    folder.loadSync read:true#, recursive:true
+
+    # check whether the cwd is changed via configuration!
+    # TODO: it should be in resource-file?
+    newCwd = path.resolve cwd, folder.cwd
+    cwd = path.resolve cwd
+    if newCwd != cwd
+      vFolder = Resource newCwd
+      vFolder.loadSync read:true
+      setPrototypeOf vFolder, folder
+      folder = vFolder
+
+    @folder = folder
     @initLogger folder
     @initTasks folder['initConfig'], aOptions # the initialization configuration of tasks.
     @processSync folder
