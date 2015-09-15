@@ -59,7 +59,7 @@ module.exports    = class ISDKTask
         initMissedTasks vMissedTasks
     return
   initLogger: (aOptions)->
-    tasks.logger = new Logger aOptions.logger
+    @logger = tasks.logger = new Logger aOptions.logger
     return
   processSync: (aFile)-> #process a files in a folder
     vContents = aFile.contents
@@ -77,6 +77,11 @@ module.exports    = class ISDKTask
       result = file:aFile
       result.result = tasks.executeSync aFile
       result.error = tasks.lastError if tasks.lastError
+    else
+      @logger.status('ERROR', aFile, 'no any tasks to execute.')
+      result =
+        file: aFile
+        error: 'no any tasks to execute'
     result
   _executeSync: (aOptions)->
     cwd = aOptions.cwd
