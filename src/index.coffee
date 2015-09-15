@@ -69,10 +69,14 @@ module.exports    = class ISDKTask
         continue unless file.filter file
         file.loadSync(read:true) unless file.loaded()
         task = @processSync(file)
+        if !aFile.force and task.error
+          result.error = true
+          break
         task
     else if aFile and aFile.tasks
       result = file:aFile
       result.result = tasks.executeSync aFile
+      result.error = tasks.lastError if tasks.lastError
     result
   _executeSync: (aOptions)->
     cwd = aOptions.cwd
