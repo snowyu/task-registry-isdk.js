@@ -92,7 +92,7 @@ module.exports    = class ISDKTask
       if aOptions.raiseError
         throw err
       else
-        Logger('isdk').status 'error', folder, err.message
+        Logger('isdk').status 'error', folder.path, err.message
         return
 
     # check whether the cwd is changed via configuration!
@@ -107,7 +107,7 @@ module.exports    = class ISDKTask
         if aOptions.raiseError
           throw err
         else
-          Logger('isdk').status 'error', folder, err.message
+          Logger('isdk').status 'error', vFolder.path, err.message
           return
       setPrototypeOf vFolder, folder
       folder = vFolder
