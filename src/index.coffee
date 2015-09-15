@@ -86,7 +86,14 @@ module.exports    = class ISDKTask
   _executeSync: (aOptions)->
     cwd = aOptions.cwd
     folder = Resource cwd, aOptions
-    folder.loadSync read:true#, recursive:true
+    try
+      folder.loadSync read:true#, recursive:true
+    catch err
+      if aOptions.raiseError
+        throw err
+      else
+        Logger('isdk').status 'error', err.message
+        return
 
     # check whether the cwd is changed via configuration!
     # TODO: it should be in resource-file?
