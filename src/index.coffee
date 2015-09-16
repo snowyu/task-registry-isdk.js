@@ -60,8 +60,14 @@ module.exports    = class ISDKTask
     return
   initLogger: (aOptions)->
     @logger = tasks.logger = new Logger aOptions.logger
+    @logger.colors.process = 'green'
+    @logger.colors.processed = 'green'
+    @logger.statusLevels.process = 'notice'
+    @logger.statusLevels.processed = 'debug'
     return
   processSync: (aFile)-> #process a files in a folder
+    @logger.status 'process', aFile
+    @logger.up()
     vContents = aFile.contents
     if isArray vContents
       result = file:aFile
@@ -82,6 +88,8 @@ module.exports    = class ISDKTask
       result =
         file: aFile
         error: 'no any tasks to execute'
+    @logger.down()
+    @logger.status 'processed', aFile
     result
   _executeSync: (aOptions)->
     cwd = aOptions.cwd
