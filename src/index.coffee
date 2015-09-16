@@ -49,13 +49,13 @@ module.exports    = class ISDKTask
         try
           require vPkgNames[i]
           Task i.name, i.options
-  initTasks: (aInitConfig, aOptions)->
+  initTasks: (aInitConfig, needAutoInstall)->
     vMissedTasks = []
     if isObject aInitConfig
       for name, opts of aInitConfig
         task = Task(name, opts)
         vMissedTasks.push name:name, options:opts unless task
-      if aOptions.autoInstall and vMissedTasks.length
+      if needAutoInstall and vMissedTasks.length
         initMissedTasks vMissedTasks
     return
   initLogger: (aOptions)->
@@ -86,6 +86,8 @@ module.exports    = class ISDKTask
   _executeSync: (aOptions)->
     cwd = aOptions.cwd
     folder = Resource cwd, aOptions
+    vNeedAutoInstall = aOptions.autoInstall
+    delete aOptions.autoInstall
     try
       folder.loadSync read:true#, recursive:true
     catch err
@@ -111,8 +113,12 @@ module.exports    = class ISDKTask
           return
       setPrototypeOf vFolder, folder
       folder = vFolder
+    delete aOptions.cwd
+    delete aOptions.src
+    delete aOptions.dest
+    folder.assign(aOptions)
 
     @folder = folder
     @initLogger folder
-    @initTasks folder['initConfig'], aOptions # the initialization configuration of tasks.
+    @initTasks folder['initConfig'], vNeedAutoInstall # the initialization configuration of tasks.
     @processSync folder
