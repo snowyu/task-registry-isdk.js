@@ -43,12 +43,14 @@ module.exports    = class ISDKTask
         result = 'task-registry-'+result
       result
 
-    npmInstall vPkgNames, save:true, (err, data)->
-      return console.error err if err
-      aTasks.forEach (t, i)->
+    npmInstall vPkgNames, save:true, (err, data)=>
+      return @logger.error(err) if err
+      aTasks.forEach (t, i)=>
         try
           require vPkgNames[i]
           Task i.name, i.options
+        catch err
+          @logger.error(err, 'install task error:'+ vPkgNames[i])
   initTasks: (aInitConfig, needAutoInstall)->
     vMissedTasks = []
     if isObject aInitConfig
@@ -59,7 +61,7 @@ module.exports    = class ISDKTask
         initMissedTasks vMissedTasks
     return
   initLogger: (aOptions)->
-    @logger = tasks.logger = new Logger aOptions.logger
+    Task::logger = new Logger aOptions.logger
     @logger.colors.process = 'green'
     @logger.colors.processed = 'green'
     @logger.statusLevels.process = 'notice'
@@ -84,7 +86,7 @@ module.exports    = class ISDKTask
       result.result = tasks.executeSync aFile
       result.error = tasks.lastError if tasks.lastError
     else
-      @logger.status('ERROR', aFile, 'no any tasks to execute.')
+      @logger.error(aFile, 'no any tasks to execute.')
       result =
         file: aFile
         error: 'no any tasks to execute'
@@ -102,7 +104,7 @@ module.exports    = class ISDKTask
       if aOptions.raiseError
         throw err
       else
-        Logger('isdk').status 'error', folder.path, err.message
+        @logger.error folder.path, err.message
         return
 
     # check whether the cwd is changed via configuration!
