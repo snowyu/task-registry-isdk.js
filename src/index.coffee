@@ -61,7 +61,8 @@ module.exports    = class ISDKTask
         initMissedTasks vMissedTasks
     return
   initLogger: (aOptions)->
-    Task::logger = new Logger aOptions.logger
+    # TODO: the tasks.logger should use the Task::logger. (remove tasks.logger attribute)
+    tasks.logger = Task::logger = new Logger aOptions.logger
     @logger.colors.process = 'green'
     @logger.colors.processed = 'green'
     @logger.statusLevels.process = 'notice'
